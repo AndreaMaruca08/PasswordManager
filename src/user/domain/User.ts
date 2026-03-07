@@ -1,4 +1,4 @@
-import {validateString} from "../../common/Validators";
+import {validateString} from "../../shared/Validators";
 
 export class User {
     private readonly id : number;

@@ -1,8 +1,9 @@
 import {UserRepository} from "../../user/domain/UserRepository";
 import {PasswordHasher} from "../../user/domain/PasswordHasher";
-import {NotFoundEx} from "../../common/exceptions/NotFoundEx";
-import {UnauthorizedEx} from "../../common/exceptions/UnauthorizedEx";
+import {NotFoundEx} from "../../shared/exceptions/NotFoundEx";
+import {UnauthorizedEx} from "../../shared/exceptions/UnauthorizedEx";
 import {TokenCreator} from "../../security/domain/TokenCreator";
+import * as v from "valibot";
 
 export class LoginHandler{
     constructor(
@@ -22,4 +23,9 @@ export class LoginHandler{
     }
 }
 
-export type LoginCommand = { username: string; password: string };
+export const LoginCommandSchema = v.object({
+    username: v.string(),
+    password: v.string()
+});
+
+export type LoginCommand = v.InferOutput<typeof LoginCommandSchema>;

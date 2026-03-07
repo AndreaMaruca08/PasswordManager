@@ -1,7 +1,8 @@
 import {UserRepository} from "../domain/UserRepository";
 import {User} from "../domain/User";
 import {PasswordHasher} from "../domain/PasswordHasher";
-import {ResourceExistsError} from "../../common/exceptions/ResourceExistsError";
+import {ResourceExistsError} from "../../shared/exceptions/ResourceExistsError";
+import * as v from "valibot";
 
 export class CreaUserHandler {
     constructor(
@@ -19,7 +20,9 @@ export class CreaUserHandler {
     }
 }
 
-export type CreaUserCommand = {
-    username: string;
-    password: string;
-};
+export const CreaUserCommandSchema = v.object({
+    username: v.string(),
+    password: v.string()
+});
+
+export type CreaUserCommand = v.InferOutput<typeof CreaUserCommandSchema>;

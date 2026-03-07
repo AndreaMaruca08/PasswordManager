@@ -1,8 +1,10 @@
 import express, { type Request, type Response } from "express";
 import {createUserHandler} from "../../index.js";
-import { ok } from "../../common/HttpResponses";
-import type { CreaUserCommand } from "../application/CreaUserHandler";
+import { ok } from "../../shared/HttpResponses";
+import {CreaUserCommand, CreaUserCommandSchema} from "../application/CreaUserHandler";
 import passport from "../../security/infrastructure/Passport";
+import * as v from "valibot";
+import {User} from "../domain/User";
 
 export const userController = express.Router();
 
@@ -16,12 +18,9 @@ userController.post("/create",
         req: Request<{}, {}, CreaUserCommand>,
         res: Response<UserDTO>
     ) => {
-        const user = await createUserHandler.handle(req.body);
-        const response: UserDTO = {
-            id: user.Id,
-            name: user.Name,
-        };
-        return ok(res, response);
+        const command = v.parse(CreaUserCommandSchema, req.body);
+        const user = await createUserHandler.handle(command);
+        return ok(res, toUserDTO(user));
     }
 );
 
@@ -31,6 +30,10 @@ userController.get("/info",
         req: Request,
         res: Response<UserDTO>
     ) => {
-        return ok(res, req.user);
+        return ok(res, toUserDTO(req.user as User));
     }
 );
+
+function toUserDTO(user: User): UserDTO {
+    return { id: user.Id, name: user.Name };
+}
