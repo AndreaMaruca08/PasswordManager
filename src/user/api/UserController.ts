@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from "express";
 import {createUserHandler} from "../../index.js";
-import { ok } from "../../shared/HttpResponses";
+import {created, ok} from "../../shared/HttpResponses";
 import {CreaUserCommand, CreaUserCommandSchema} from "../application/CreaUserHandler";
 import passport from "../../security/infrastructure/Passport";
 import * as v from "valibot";
@@ -20,7 +20,7 @@ userController.post("/create",
     ) => {
         const command = v.parse(CreaUserCommandSchema, req.body);
         const user = await createUserHandler.handle(command);
-        return ok(res, toUserDTO(user));
+        return created(res, toUserDTO(user));
     }
 );
 

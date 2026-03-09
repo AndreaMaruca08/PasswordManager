@@ -1,11 +1,7 @@
 import {User} from "./User";
+import {CrudRepo} from "../../shared/CrudRepo";
 
-export interface UserRepository {
-    getById(id: number): Promise<User | null>;
-    save(user: User): Promise<User>;
-    update(user: User): Promise<User>;
-    delete(id: number): Promise<void>;
+export interface UserRepository extends CrudRepo<User>{
     exists(username: string): Promise<boolean>;
-
     findByUsername(username: string): Promise<User | null>;
 }

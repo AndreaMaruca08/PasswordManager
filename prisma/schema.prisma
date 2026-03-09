@@ -11,14 +11,17 @@ model User {
   id           Int        @id @default(autoincrement())
   username     String     @unique
   passwordHash String
+  masterKey    String     @default("NULL")
   createdAt    DateTime   @default(now())
   passwords    Password[]
 }
 
 model Password {
-  id                BigInt @id @default(autoincrement())
+  id                BigInt   @id @default(autoincrement())
   title             String
+  website           String
   encryptedPassword String
   userId            Int
-  user              User   @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now())
+  user              User     @relation(fields: [userId], references: [id])
 }

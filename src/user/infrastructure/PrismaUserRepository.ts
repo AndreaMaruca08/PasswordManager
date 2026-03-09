@@ -23,6 +23,7 @@ export class PrismaUserRepository implements UserRepository {
             create: {
                 username: user.Name,
                 passwordHash: user.Password,
+                masterKey: user.MasterKey
             },
         });
         return prismaUserMap(prismaUser);
